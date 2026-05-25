@@ -1,1 +1,1 @@
-require('./src/server.js');
+ index.js

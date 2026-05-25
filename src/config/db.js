@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(
-      // process.env.MONGO_URL
       process.env.MONGO_URI
     );
 
@@ -12,7 +11,6 @@ const connectDB = async () => {
     );
   } catch (error) {
     console.log(error.message);
-
     process.exit(1);
   }
 };
