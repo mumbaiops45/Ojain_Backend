@@ -85,6 +85,17 @@ router.get(
 );
 
 // GET SINGLE PRODUCT
+// router.get(
+//   "/:id",
+//   productController.getProductById
+// );
+// CATEGORY
+router.get(
+  "/category/:categoryId",
+  productController.getProductsByCategory
+);
+
+// GET SINGLE PRODUCT
 router.get(
   "/:id",
   productController.getProductById
