@@ -3,38 +3,35 @@ const Category = require("../models/Category");
 // CREATE CATEGORY (with file upload)
 const createCategory = async (req, res) => {
   try {
-    const { name, description, image } = req.body; // for JSON or fallback
-    const finalImage = req.file ? req.file.path : image;
+    const { name, description } = req.body;
 
-    if (!name || !description || !finalImage) {
+    const imageUrl = req.file
+      ? `${req.protocol}://${req.get("host")}/${req.file.path}`
+      : "";
+
+    if (!name || !description || !imageUrl) {
       return res.status(400).json({
         success: false,
-        message: "All fields (name, description, image) are required",
+        message: "All fields required",
       });
     }
 
-    // Check if category with same name already exists (case-insensitive)
-    const existingCategory = await Category.findOne({
-      name: { $regex: new RegExp(`^${name}$`, "i") }
+    const category = await Category.create({
+      name,
+      description,
+      image: imageUrl,
     });
-    
-    if (existingCategory) {
-      return res.status(400).json({
-        success: false,
-        message: "Category with this name already exists",
-      });
-    }
 
-    const category = await Category.create({ name, description, image: finalImage });
-
-    return res.status(201).json({
+    res.status(201).json({
       success: true,
-      message: "Category created successfully",
       category,
     });
+
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
