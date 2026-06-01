@@ -1,445 +1,518 @@
-// //   // // // const express = require("express");
+// // //   // // // const express = require("express");
 
-// //   // // // const dotenv = require("dotenv");
+// // //   // // // const dotenv = require("dotenv");
 
-// //   // // // const cors = require("cors");
+// // //   // // // const cors = require("cors");
 
-// //   // // // const connectDB = require("./config/db");
+// // //   // // // const connectDB = require("./config/db");
 
 
 
-// //   // // // // CONFIG
-// //   // // // dotenv.config();
+// // //   // // // // CONFIG
+// // //   // // // dotenv.config();
 
 
 
-// //   // // // // DATABASE
-// //   // // // connectDB();
+// // //   // // // // DATABASE
+// // //   // // // connectDB();
 
 
 
-// //   // // // // APP
-// //   // // // const app = express();
+// // //   // // // // APP
+// // //   // // // const app = express();
 
 
 
-// //   // // // // MIDDLEWARE
-// //   // // // app.use(express.json());
+// // //   // // // // MIDDLEWARE
+// // //   // // // app.use(express.json());
 
-// //   // // // app.use(
-// //   // // //   cors({
-// //   // // //     origin: "http://localhost:3000",
-// //   // // //     credentials: true,
-// //   // // //   })
-// //   // // // );
+// // //   // // // app.use(
+// // //   // // //   cors({
+// // //   // // //     origin: "http://localhost:3000",
+// // //   // // //     credentials: true,
+// // //   // // //   })
+// // //   // // // );
 
 
 
-// //   // // // // TEST ROUTE
-// //   // // // app.get("/", (req, res) => {
-// //   // // //   res.send("API Running");
-// //   // // // });
+// // //   // // // // TEST ROUTE
+// // //   // // // app.get("/", (req, res) => {
+// // //   // // //   res.send("API Running");
+// // //   // // // });
 
 
 
-// //   // // // // ROUTES
-// //   // // // app.use("/api/auth",
-// //   // // //   require("./routes/authRoutes")
-// //   // // // );
+// // //   // // // // ROUTES
+// // //   // // // app.use("/api/auth",
+// // //   // // //   require("./routes/authRoutes")
+// // //   // // // );
 
-// //   // // // app.use(
-// //   // // //   "/api/products",
-// //   // // //   require("./routes/productRoutes")
-// //   // // // );
+// // //   // // // app.use(
+// // //   // // //   "/api/products",
+// // //   // // //   require("./routes/productRoutes")
+// // //   // // // );
 
-// //   // // // app.use(
-// //   // // //   "/api/orders",
-// //   // // //   require("./routes/orderRoutes")
-// //   // // // );
+// // //   // // // app.use(
+// // //   // // //   "/api/orders",
+// // //   // // //   require("./routes/orderRoutes")
+// // //   // // // );
 
-// //   // // // app.use(
-// //   // // //   "/api/vendors",
-// //   // // //   require("./routes/vendorRoutes")
-// //   // // // );
+// // //   // // // app.use(
+// // //   // // //   "/api/vendors",
+// // //   // // //   require("./routes/vendorRoutes")
+// // //   // // // );
 
-// //   // // // app.use(
-// //   // // //   "/api/payouts",
-// //   // // //   require("./routes/payoutRoutes")
-// //   // // // );
+// // //   // // // app.use(
+// // //   // // //   "/api/payouts",
+// // //   // // //   require("./routes/payoutRoutes")
+// // //   // // // );
 
-// //   // // // const cookieParser = require("cookie-parser");
-// //   // // // app.use(cookieParser());
+// // //   // // // const cookieParser = require("cookie-parser");
+// // //   // // // app.use(cookieParser());
 
 
 
-// //   // // // // SERVER
-// //   // // // const PORT =
-// //   // // //   process.env.PORT || 5000;
+// // //   // // // // SERVER
+// // //   // // // const PORT =
+// // //   // // //   process.env.PORT || 5000;
 
-// //   // // // app.listen(PORT, () => {
-// //   // // //   console.log(
-// //   // // //     `Server running on port ${PORT}`
-// //   // // //   );
-// //   // // // });
+// // //   // // // app.listen(PORT, () => {
+// // //   // // //   console.log(
+// // //   // // //     `Server running on port ${PORT}`
+// // //   // // //   );
+// // //   // // // });
 
-// //   // // const express = require("express");
-// //   // // const dotenv = require("dotenv");
-// //   // // const cors = require("cors");
-// //   // // const cookieParser = require("cookie-parser");
-// //   // // const connectDB = require("./config/db");
+// // //   // // const express = require("express");
+// // //   // // const dotenv = require("dotenv");
+// // //   // // const cors = require("cors");
+// // //   // // const cookieParser = require("cookie-parser");
+// // //   // // const connectDB = require("./config/db");
 
-// //   // // dotenv.config();
-// //   // // connectDB();
+// // //   // // dotenv.config();
+// // //   // // connectDB();
 
-// //   // // const app = express();
+// // //   // // const app = express();
 
-// //   // // // ORDER MATTERS: cookieParser BEFORE routes
-// //   // // app.use(express.json());
-// //   // // app.use(cookieParser());
-// //   // // app.use(cors({
-// //   // //   origin: "http://localhost:3000",
-// //   // //   credentials: true,
-// //   // // }));
+// // //   // // // ORDER MATTERS: cookieParser BEFORE routes
+// // //   // // app.use(express.json());
+// // //   // // app.use(cookieParser());
+// // //   // // app.use(cors({
+// // //   // //   origin: "http://localhost:3000",
+// // //   // //   credentials: true,
+// // //   // // }));
 
-// //   // // app.get("/", (req, res) => res.send("API Running"));
+// // //   // // app.get("/", (req, res) => res.send("API Running"));
 
-// //   // // // Routes
-// //   // // app.use("/api/auth", require("./routes/authRoutes"));
-// //   // // app.use("/api/products", require("./routes/productRoutes"));
-// //   // // app.use("/api/orders", require("./routes/orderRoutes"));
-// //   // // app.use("/api/vendors", require("./routes/vendorRoutes"));
-// //   // // app.use("/api/admin", require("./routes/adminRoutes"));
-// //   // // app.use("/api/payouts", require("./routes/payoutRoutes"));
+// // //   // // // Routes
+// // //   // // app.use("/api/auth", require("./routes/authRoutes"));
+// // //   // // app.use("/api/products", require("./routes/productRoutes"));
+// // //   // // app.use("/api/orders", require("./routes/orderRoutes"));
+// // //   // // app.use("/api/vendors", require("./routes/vendorRoutes"));
+// // //   // // app.use("/api/admin", require("./routes/adminRoutes"));
+// // //   // // app.use("/api/payouts", require("./routes/payoutRoutes"));
 
-// //   // // const PORT = process.env.PORT || 5000;
-// //   // // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// // //   // // const PORT = process.env.PORT || 5000;
+// // //   // // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 
 
 
-// //   // // const express = require("express");
+// // //   // // const express = require("express");
 
-// //   // // const dotenv = require("dotenv");
+// // //   // // const dotenv = require("dotenv");
 
-// //   // // const cors = require("cors");
+// // //   // // const cors = require("cors");
 
-// //   // // const connectDB = require("./config/db");
+// // //   // // const connectDB = require("./config/db");
 
 
 
-// //   // // // CONFIG
-// //   // // dotenv.config();
+// // //   // // // CONFIG
+// // //   // // dotenv.config();
 
 
 
-// //   // // // DATABASE
-// //   // // connectDB();
+// // //   // // // DATABASE
+// // //   // // connectDB();
 
 
 
-// //   // // // APP
-// //   // // const app = express();
+// // //   // // // APP
+// // //   // // const app = express();
 
 
 
-// //   // // // MIDDLEWARE
-// //   // // app.use(express.json());
+// // //   // // // MIDDLEWARE
+// // //   // // app.use(express.json());
 
-// //   // // app.use(
-// //   // //   cors({
-// //   // //     origin: "http://localhost:3000",
-// //   // //     credentials: true,
-// //   // //   })
-// //   // // );
+// // //   // // app.use(
+// // //   // //   cors({
+// // //   // //     origin: "http://localhost:3000",
+// // //   // //     credentials: true,
+// // //   // //   })
+// // //   // // );
 
 
 
-// //   // // // TEST ROUTE
-// //   // // app.get("/", (req, res) => {
-// //   // //   res.send("API Running");
-// //   // // });
+// // //   // // // TEST ROUTE
+// // //   // // app.get("/", (req, res) => {
+// // //   // //   res.send("API Running");
+// // //   // // });
 
 
 
-// //   // // // ROUTES
-// //   // // app.use("/api/auth",
-// //   // //   require("./routes/authRoutes")
-// //   // // );
+// // //   // // // ROUTES
+// // //   // // app.use("/api/auth",
+// // //   // //   require("./routes/authRoutes")
+// // //   // // );
 
-// //   // // app.use(
-// //   // //   "/api/products",
-// //   // //   require("./routes/productRoutes")
-// //   // // );
+// // //   // // app.use(
+// // //   // //   "/api/products",
+// // //   // //   require("./routes/productRoutes")
+// // //   // // );
 
-// //   // // app.use(
-// //   // //   "/api/orders",
-// //   // //   require("./routes/orderRoutes")
-// //   // // );
+// // //   // // app.use(
+// // //   // //   "/api/orders",
+// // //   // //   require("./routes/orderRoutes")
+// // //   // // );
 
-// //   // // app.use(
-// //   // //   "/api/vendors",
-// //   // //   require("./routes/vendorRoutes")
-// //   // // );
+// // //   // // app.use(
+// // //   // //   "/api/vendors",
+// // //   // //   require("./routes/vendorRoutes")
+// // //   // // );
 
-// //   // // app.use(
-// //   // //   "/api/payouts",
-// //   // //   require("./routes/payoutRoutes")
-// //   // // );
+// // //   // // app.use(
+// // //   // //   "/api/payouts",
+// // //   // //   require("./routes/payoutRoutes")
+// // //   // // );
 
-// //   // // const cookieParser = require("cookie-parser");
-// //   // // app.use(cookieParser());
+// // //   // // const cookieParser = require("cookie-parser");
+// // //   // // app.use(cookieParser());
 
 
 
-// //   // // // SERVER
-// //   // // const PORT =
-// //   // //   process.env.PORT || 5000;
+// // //   // // // SERVER
+// // //   // // const PORT =
+// // //   // //   process.env.PORT || 5000;
 
-// //   // // app.listen(PORT, () => {
-// //   // //   console.log(
-// //   // //     `Server running on port ${PORT}`
-// //   // //   );
-// //   // // });
+// // //   // // app.listen(PORT, () => {
+// // //   // //   console.log(
+// // //   // //     `Server running on port ${PORT}`
+// // //   // //   );
+// // //   // // });
 
-// //   // const express = require("express");
-// //   // const dotenv = require("dotenv");
-// //   // const cors = require("cors");
-// //   // const cookieParser = require("cookie-parser");
-// //   // const connectDB = require("./config/db");
-// //   // const cartRoutes = require("./routes/cartRoutes");
-// //   // const addressRoutes = require("./routes/addressRoutes");
-// //   // const orderRoutes = require("./routes/orderRoutes");
-// //   // const paymentRoutes = require("./routes/paymentRoutes");
-// //   // dotenv.config();
-// //   // connectDB();
+// // //   // const express = require("express");
+// // //   // const dotenv = require("dotenv");
+// // //   // const cors = require("cors");
+// // //   // const cookieParser = require("cookie-parser");
+// // //   // const connectDB = require("./config/db");
+// // //   // const cartRoutes = require("./routes/cartRoutes");
+// // //   // const addressRoutes = require("./routes/addressRoutes");
+// // //   // const orderRoutes = require("./routes/orderRoutes");
+// // //   // const paymentRoutes = require("./routes/paymentRoutes");
+// // //   // dotenv.config();
+// // //   // connectDB();
 
-// //   // const app = express();
+// // //   // const app = express();
 
-// //   // // ORDER MATTERS: cookieParser BEFORE routes
-// //   // app.use(express.json());
-// //   // app.use(cookieParser());
-// //   // app.use(cors({
-// //   //   origin: "http://localhost:3000",
-// //   //   credentials: true,
-// //   // }));
+// // //   // // ORDER MATTERS: cookieParser BEFORE routes
+// // //   // app.use(express.json());
+// // //   // app.use(cookieParser());
+// // //   // app.use(cors({
+// // //   //   origin: "http://localhost:3000",
+// // //   //   credentials: true,
+// // //   // }));
 
-// //   // app.get("/", (req, res) => res.send("API Running"));
+// // //   // app.get("/", (req, res) => res.send("API Running"));
 
-// //   // // Routes
-// //   // app.use("/api/auth", require("./routes/authRoutes"));
-// //   // app.use("/api/products", require("./routes/productRoutes"));
-// //   // app.use("/api/vendors", require("./routes/vendorRoutes"));
-// //   // app.use("/api/admin", require("./routes/adminRoutes"));
-// //   // app.use("/api/payouts", require("./routes/payoutRoutes"));
-// //   // app.use("/api/category", require("./routes/categoryRoutes")); 
-// //   // app.use("/uploads", express.static("uploads"));
-// //   // app.use('/api/cart', cartRoutes);  
-// //   // app.use("/api/address", addressRoutes);
-// //   // app.use("/api/orders", orderRoutes);
-// //   // app.use("/api/payments", paymentRoutes);
-// //   // const PORT = process.env.PORT || 5000;
-// //   // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// // //   // // Routes
+// // //   // app.use("/api/auth", require("./routes/authRoutes"));
+// // //   // app.use("/api/products", require("./routes/productRoutes"));
+// // //   // app.use("/api/vendors", require("./routes/vendorRoutes"));
+// // //   // app.use("/api/admin", require("./routes/adminRoutes"));
+// // //   // app.use("/api/payouts", require("./routes/payoutRoutes"));
+// // //   // app.use("/api/category", require("./routes/categoryRoutes")); 
+// // //   // app.use("/uploads", express.static("uploads"));
+// // //   // app.use('/api/cart', cartRoutes);  
+// // //   // app.use("/api/address", addressRoutes);
+// // //   // app.use("/api/orders", orderRoutes);
+// // //   // app.use("/api/payments", paymentRoutes);
+// // //   // const PORT = process.env.PORT || 5000;
+// // //   // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 
 
 
-// //   const express = require("express");
+// // //   const express = require("express");
+
+// // // const dotenv = require("dotenv");
+
+// // // const cors = require("cors");
+
+// // // const cookieParser = require("cookie-parser");
+
+// // // const connectDB = require("./config/db");
+
+// // // // ==========================================
+// // // // IMPORT ROUTES
+// // // // ==========================================
+
+// // // const authRoutes = require("./routes/authRoutes");
+
+// // // const adminRoutes = require("./routes/adminRoutes");
+
+// // // const productRoutes = require("./routes/productRoutes");
+
+// // // const categoryRoutes = require("./routes/categoryRoutes");
+
+// // // const vendorRoutes = require("./routes/vendorRoutes");
+
+// // // const orderRoutes = require("./routes/orderRoutes");
+
+// // // const cartRoutes = require("./routes/cartRoutes");
+
+// // // const addressRoutes = require("./routes/addressRoutes");
+
+// // // const payoutRoutes = require("./routes/payoutRoutes");
+
+// // // const paymentRoutes = require("./routes/paymentRoutes");
+
+// // // // ==========================================
+// // // // CONFIG ENV
+// // // // ==========================================
+
+// // // dotenv.config();
+
+// // // // ==========================================
+// // // // CONNECT DATABASE
+// // // // ==========================================
+
+// // // connectDB();
+
+// // // // ==========================================
+// // // // INIT APP
+// // // // ==========================================
+
+// // // const app = express();
+
+// // // // ==========================================
+// // // // MIDDLEWARE
+// // // // ==========================================
+
+// // // // BODY PARSER
+// // // app.use(express.json());
+
+// // // app.use(express.urlencoded({ extended: true }));
+
+// // // // COOKIE PARSER
+// // // app.use(cookieParser());
+
+// // // // CORS
+// // // app.use(
+// // //   cors({
+// // //     origin: process.env.CLIENT_URL || "http://localhost:3000",
+
+// // //     credentials: true,
+// // //   })
+// // // );
+
+// // // // ==========================================
+// // // // STATIC FOLDER
+// // // // ==========================================
+
+// // // app.use(
+// // //   "/uploads",
+// // //   express.static("uploads")
+// // // );
+
+// // // // ==========================================
+// // // // ROOT ROUTE
+// // // // ==========================================
+
+// // // app.get("/", (req, res) => {
+// // //   res.send("API Running...");
+// // // });
+
+// // // // ==========================================
+// // // // API ROUTES
+// // // // ==========================================
+
+// // // // AUTH
+// // // app.use(
+// // //   "/api/auth",
+// // //   authRoutes
+// // // );
+
+// // // // ADMIN
+// // // app.use(
+// // //   "/api/admin",
+// // //   adminRoutes
+// // // );
+
+// // // // PRODUCTS
+// // // app.use(
+// // //   "/api/products",
+// // //   productRoutes
+// // // );
+
+// // // // CATEGORY
+// // // app.use(
+// // //   "/api/category",
+// // //   categoryRoutes
+// // // );
+
+// // // // VENDORS
+// // // app.use(
+// // //   "/api/vendors",
+// // //   vendorRoutes
+// // // );
+
+// // // // ORDERS
+// // // app.use(
+// // //   "/api/orders",
+// // //   orderRoutes
+// // // );
+
+// // // // CART
+// // // app.use(
+// // //   "/api/cart",
+// // //   cartRoutes
+// // // );
+
+// // // // ADDRESS
+// // // app.use(
+// // //   "/api/address",
+// // //   addressRoutes
+// // // );
+
+// // // // PAYOUTS
+// // // app.use(
+// // //   "/api/payouts",
+// // //   payoutRoutes
+// // // );
+
+// // // // PAYMENTS
+// // // app.use(
+// // //   "/api/payments",
+// // //   paymentRoutes
+// // // );
+
+// // // // ==========================================
+// // // // 404 ROUTE HANDLER
+// // // // ==========================================
+
+// // // app.use((req, res) => {
+// // //   res.status(404).json({
+// // //     success: false,
+
+// // //     message: "Route not found",
+// // //   });
+// // // });
+
+// // // // ==========================================
+// // // // GLOBAL ERROR HANDLER
+// // // // ==========================================
+
+// // // app.use(
+// // //   (err, req, res, next) => {
+// // //     console.log(err);
+
+// // //     res.status(500).json({
+// // //       success: false,
+
+// // //       message:
+// // //         err.message ||
+// // //         "Internal Server Error",
+// // //     });
+// // //   }
+// // // );
+
+// // // // ==========================================
+// // // // SERVER
+// // // // ==========================================
+
+// // // const PORT =
+// // //   process.env.PORT || 5000;
+
+// // // app.listen(PORT, () => {
+// // //   console.log(
+// // //     `Server running on port ${PORT}`
+// // //   );
+// // // });
+
 
 // // const dotenv = require("dotenv");
-
-// // const cors = require("cors");
-
-// // const cookieParser = require("cookie-parser");
-
-// // const connectDB = require("./config/db");
-
-// // // ==========================================
-// // // IMPORT ROUTES
-// // // ==========================================
-
-// // const authRoutes = require("./routes/authRoutes");
-
-// // const adminRoutes = require("./routes/adminRoutes");
-
-// // const productRoutes = require("./routes/productRoutes");
-
-// // const categoryRoutes = require("./routes/categoryRoutes");
-
-// // const vendorRoutes = require("./routes/vendorRoutes");
-
-// // const orderRoutes = require("./routes/orderRoutes");
-
-// // const cartRoutes = require("./routes/cartRoutes");
-
-// // const addressRoutes = require("./routes/addressRoutes");
-
-// // const payoutRoutes = require("./routes/payoutRoutes");
-
-// // const paymentRoutes = require("./routes/paymentRoutes");
-
-// // // ==========================================
-// // // CONFIG ENV
-// // // ==========================================
-
 // // dotenv.config();
 
-// // // ==========================================
-// // // CONNECT DATABASE
-// // // ==========================================
+// // const express = require("express");
+// // const cors = require("cors");
+// // const cookieParser = require("cookie-parser");
+// // const connectDB = require("./config/db");
 
+// // // ROUTES
+// // const authRoutes = require("./routes/authRoutes");
+// // const adminRoutes = require("./routes/adminRoutes");
+// // const productRoutes = require("./routes/productRoutes");
+// // const categoryRoutes = require("./routes/categoryRoutes");
+// // const vendorRoutes = require("./routes/vendorRoutes");
+// // const orderRoutes = require("./routes/orderRoutes");
+// // const cartRoutes = require("./routes/cartRoutes");
+// // const addressRoutes = require("./routes/addressRoutes");
+// // const payoutRoutes = require("./routes/payoutRoutes");
+// // const paymentRoutes = require("./routes/paymentRoutes");
+
+// // // DB CONNECT (AFTER dotenv.config)
 // // connectDB();
-
-// // // ==========================================
-// // // INIT APP
-// // // ==========================================
 
 // // const app = express();
 
-// // // ==========================================
-// // // MIDDLEWARE
-// // // ==========================================
-
-// // // BODY PARSER
 // // app.use(express.json());
-
 // // app.use(express.urlencoded({ extended: true }));
-
-// // // COOKIE PARSER
 // // app.use(cookieParser());
 
-// // // CORS
-// // app.use(
-// //   cors({
-// //     origin: process.env.CLIENT_URL || "http://localhost:3000",
+// // app.use(cors({
+// //   origin: process.env.CLIENT_URL || "http://localhost:3000",
+// //   credentials: true,
+// // }));
 
-// //     credentials: true,
-// //   })
-// // );
-
-// // // ==========================================
-// // // STATIC FOLDER
-// // // ==========================================
-
-// // app.use(
-// //   "/uploads",
-// //   express.static("uploads")
-// // );
-
-// // // ==========================================
-// // // ROOT ROUTE
-// // // ==========================================
+// // app.use("/uploads", express.static("uploads"));
 
 // // app.get("/", (req, res) => {
 // //   res.send("API Running...");
 // // });
 
-// // // ==========================================
-// // // API ROUTES
-// // // ==========================================
+// // // ROUTES
+// // app.use("/api/auth", authRoutes);
+// // app.use("/api/admin", adminRoutes);
+// // app.use("/api/products", productRoutes);
+// // app.use("/api/category", categoryRoutes);
+// // app.use("/api/vendors", vendorRoutes);
+// // app.use("/api/orders", orderRoutes);
+// // app.use("/api/cart", cartRoutes);
+// // app.use("/api/address", addressRoutes);
+// // app.use("/api/payouts", payoutRoutes);
+// // app.use("/api/payments", paymentRoutes);
 
-// // // AUTH
-// // app.use(
-// //   "/api/auth",
-// //   authRoutes
-// // );
-
-// // // ADMIN
-// // app.use(
-// //   "/api/admin",
-// //   adminRoutes
-// // );
-
-// // // PRODUCTS
-// // app.use(
-// //   "/api/products",
-// //   productRoutes
-// // );
-
-// // // CATEGORY
-// // app.use(
-// //   "/api/category",
-// //   categoryRoutes
-// // );
-
-// // // VENDORS
-// // app.use(
-// //   "/api/vendors",
-// //   vendorRoutes
-// // );
-
-// // // ORDERS
-// // app.use(
-// //   "/api/orders",
-// //   orderRoutes
-// // );
-
-// // // CART
-// // app.use(
-// //   "/api/cart",
-// //   cartRoutes
-// // );
-
-// // // ADDRESS
-// // app.use(
-// //   "/api/address",
-// //   addressRoutes
-// // );
-
-// // // PAYOUTS
-// // app.use(
-// //   "/api/payouts",
-// //   payoutRoutes
-// // );
-
-// // // PAYMENTS
-// // app.use(
-// //   "/api/payments",
-// //   paymentRoutes
-// // );
-
-// // // ==========================================
-// // // 404 ROUTE HANDLER
-// // // ==========================================
-
+// // // 404
 // // app.use((req, res) => {
-// //   res.status(404).json({
-// //     success: false,
-
-// //     message: "Route not found",
-// //   });
+// //   res.status(404).json({ success: false, message: "Route not found" });
 // // });
 
-// // // ==========================================
-// // // GLOBAL ERROR HANDLER
-// // // ==========================================
+// // // ERROR HANDLER
+// // // app.use((err, req, res, next) => {
+// // //   console.log(err);
+// // //   res.status(500).json({
+// // //     success: false,
+// // //     message: err.message || "Internal Server Error",
+// // //   });
 
-// // app.use(
-// //   (err, req, res, next) => {
-// //     console.log(err);
 
-// //     res.status(500).json({
-// //       success: false,
 
-// //       message:
-// //         err.message ||
-// //         "Internal Server Error",
-// //     });
-// //   }
-// // );
-
-// // // ==========================================
-// // // SERVER
-// // // ==========================================
-
-// // const PORT =
-// //   process.env.PORT || 5000;
+// // const PORT = process.env.PORT || 5000;
 
 // // app.listen(PORT, () => {
-// //   console.log(
-// //     `Server running on port ${PORT}`
-// //   );
+// //   console.log(`Server running on port ${PORT}`);
 // // });
-
 
 // const dotenv = require("dotenv");
 // dotenv.config();
@@ -461,27 +534,42 @@
 // const payoutRoutes = require("./routes/payoutRoutes");
 // const paymentRoutes = require("./routes/paymentRoutes");
 
-// // DB CONNECT (AFTER dotenv.config)
+// // CONNECT DB
 // connectDB();
 
 // const app = express();
 
+// // ======================
+// // MIDDLEWARE
+// // ======================
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 // app.use(cookieParser());
 
-// app.use(cors({
-//   origin: process.env.CLIENT_URL || "http://localhost:3000",
-//   credentials: true,
-// }));
+// // ✅ ONLY ONE CORS CONFIG (IMPORTANT)
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:3000",
+//       "https://ojainwebsite.netlify.app"
+//     ],
+//     credentials: true,
+//   })
+// );
 
+// // STATIC FILES
 // app.use("/uploads", express.static("uploads"));
 
+// // ======================
+// // TEST ROUTE
+// // ======================
 // app.get("/", (req, res) => {
 //   res.send("API Running...");
 // });
 
+// // ======================
 // // ROUTES
+// // ======================
 // app.use("/api/auth", authRoutes);
 // app.use("/api/admin", adminRoutes);
 // app.use("/api/products", productRoutes);
@@ -493,21 +581,30 @@
 // app.use("/api/payouts", payoutRoutes);
 // app.use("/api/payments", paymentRoutes);
 
-// // 404
+// // ======================
+// // 404 HANDLER
+// // ======================
 // app.use((req, res) => {
-//   res.status(404).json({ success: false, message: "Route not found" });
+//   res.status(404).json({
+//     success: false,
+//     message: "Route not found",
+//   });
 // });
 
+// // ======================
 // // ERROR HANDLER
-// // app.use((err, req, res, next) => {
-// //   console.log(err);
-// //   res.status(500).json({
-// //     success: false,
-// //     message: err.message || "Internal Server Error",
-// //   });
+// // ======================
+// app.use((err, req, res, next) => {
+//   console.log(err);
+//   res.status(500).json({
+//     success: false,
+//     message: err.message || "Internal Server Error",
+//   });
+// });
 
-
-
+// // ======================
+// // START SERVER
+// // ======================
 // const PORT = process.env.PORT || 5000;
 
 // app.listen(PORT, () => {
@@ -520,6 +617,8 @@ dotenv.config();
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const path = require("path");
+
 const connectDB = require("./config/db");
 
 // ROUTES
@@ -534,42 +633,51 @@ const addressRoutes = require("./routes/addressRoutes");
 const payoutRoutes = require("./routes/payoutRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 
-// CONNECT DB
+// CONNECT DATABASE
 connectDB();
 
 const app = express();
 
-// ======================
+// ====================================
 // MIDDLEWARE
-// ======================
+// ====================================
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// ✅ ONLY ONE CORS CONFIG (IMPORTANT)
+// CORS
 app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://ojainwebsite.netlify.app"
+      "https://ojainwebsite.netlify.app",
     ],
     credentials: true,
   })
 );
 
+// ====================================
 // STATIC FILES
-app.use("/uploads", express.static("uploads"));
+// ====================================
 
-// ======================
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "uploads"))
+);
+
+// ====================================
 // TEST ROUTE
-// ======================
+// ====================================
+
 app.get("/", (req, res) => {
   res.send("API Running...");
 });
 
-// ======================
+// ====================================
 // ROUTES
-// ======================
+// ====================================
+
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
@@ -581,9 +689,10 @@ app.use("/api/address", addressRoutes);
 app.use("/api/payouts", payoutRoutes);
 app.use("/api/payments", paymentRoutes);
 
-// ======================
+// ====================================
 // 404 HANDLER
-// ======================
+// ====================================
+
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -591,20 +700,23 @@ app.use((req, res) => {
   });
 });
 
-// ======================
+// ====================================
 // ERROR HANDLER
-// ======================
+// ====================================
+
 app.use((err, req, res, next) => {
   console.log(err);
+
   res.status(500).json({
     success: false,
     message: err.message || "Internal Server Error",
   });
 });
 
-// ======================
+// ====================================
 // START SERVER
-// ======================
+// ====================================
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

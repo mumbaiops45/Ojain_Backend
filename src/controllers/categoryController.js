@@ -67,13 +67,25 @@ const updateCategory = async (req, res) => {
   try {
     const { name, description } = req.body;
     const updateData = { name, description };
+    // if (req.file) {
+    //   updateData.image = req.file.path;
+    // }
     if (req.file) {
-      updateData.image = req.file.path;
+      updateData.image =
+        `${req.protocol}://${req.get("host")}/${req.file.path}`;
     }
-    const category = await Category.findByIdAndUpdate(req.params.id, updateData, {
-      new: true,
-      runValidators: true,
-    });
+    // const category = await Category.findByIdAndUpdate(req.params.id, updateData, {
+    //   new: true,
+    //   runValidators: true,
+    // });
+    const category = await Category.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      {
+        returnDocument: "after",
+        runValidators: true,
+      }
+    );
     if (!category) {
       return res.status(404).json({ success: false, message: "Category not found" });
     }
