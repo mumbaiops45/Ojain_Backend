@@ -1,109 +1,144 @@
+// const multer = require("multer");
+// const path = require("path");
+// const fs = require("fs");
+
+// // CREATE FOLDER
+// const uploadDir =
+//   "uploads/vendors";
+
+// if (
+//   !fs.existsSync(uploadDir)
+// ) {
+//   fs.mkdirSync(uploadDir, {
+//     recursive: true,
+//   });
+// }
+
+// // STORAGE
+// const storage =
+//   multer.diskStorage({
+//     destination: (
+//       req,
+//       file,
+//       cb
+//     ) => {
+//       cb(
+//         null,
+//         uploadDir
+//       );
+//     },
+
+//     filename: (
+//       req,
+//       file,
+//       cb
+//     ) => {
+//       const unique =
+//         Date.now() +
+//         "-" +
+//         Math.round(
+//           Math.random() *
+//             1e9
+//         );
+
+//       const ext =
+//         path.extname(
+//           file.originalname
+//         );
+
+//       cb(
+//         null,
+//         `vendor-${unique}${ext}`
+//       );
+//     },
+//   });
+
+// // FILE FILTER
+// const fileFilter = (
+//   req,
+//   file,
+//   cb
+// ) => {
+//   const allowed =
+//     /jpeg|jpg|png|webp/;
+
+//   const extname =
+//     allowed.test(
+//       path
+//         .extname(
+//           file.originalname
+//         )
+//         .toLowerCase()
+//     );
+
+//   const mimetype =
+//     allowed.test(
+//       file.mimetype
+//     );
+
+//   if (
+//     extname &&
+//     mimetype
+//   ) {
+//     cb(null, true);
+//   } else {
+//     cb(
+//       new Error(
+//         "Only images allowed"
+//       )
+//     );
+//   }
+// };
+
+// // MULTER
+// const uploadVendorImage =
+//   multer({
+//     storage,
+
+//     limits: {
+//       fileSize:
+//         5 *
+//         1024 *
+//         1024,
+//     },
+
+//     fileFilter,
+//   });
+
+// module.exports =
+//   uploadVendorImage;
+
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
 
-// CREATE FOLDER
-const uploadDir =
-  "uploads/vendors";
+const {
+  CloudinaryStorage,
+} = require("multer-storage-cloudinary");
 
-if (
-  !fs.existsSync(uploadDir)
-) {
-  fs.mkdirSync(uploadDir, {
-    recursive: true,
-  });
-}
+const cloudinary =
+  require("../config/cloudinary");
 
-// STORAGE
 const storage =
-  multer.diskStorage({
-    destination: (
-      req,
-      file,
-      cb
-    ) => {
-      cb(
-        null,
-        uploadDir
-      );
-    },
+  new CloudinaryStorage({
+    cloudinary,
 
-    filename: (
-      req,
-      file,
-      cb
-    ) => {
-      const unique =
-        Date.now() +
-        "-" +
-        Math.round(
-          Math.random() *
-            1e9
-        );
+    params: async (req, file) => ({
+      folder: "vendors",
 
-      const ext =
-        path.extname(
-          file.originalname
-        );
+      allowed_formats: [
+        "jpg",
+        "jpeg",
+        "png",
+        "webp",
+      ],
 
-      cb(
-        null,
-        `vendor-${unique}${ext}`
-      );
-    },
+
+      public_id:
+        `vendor-${Date.now()}`
+    }),
   });
 
-// FILE FILTER
-const fileFilter = (
-  req,
-  file,
-  cb
-) => {
-  const allowed =
-    /jpeg|jpg|png|webp/;
+const upload = multer({
+  storage,
+});
 
-  const extname =
-    allowed.test(
-      path
-        .extname(
-          file.originalname
-        )
-        .toLowerCase()
-    );
-
-  const mimetype =
-    allowed.test(
-      file.mimetype
-    );
-
-  if (
-    extname &&
-    mimetype
-  ) {
-    cb(null, true);
-  } else {
-    cb(
-      new Error(
-        "Only images allowed"
-      )
-    );
-  }
-};
-
-// MULTER
-const uploadVendorImage =
-  multer({
-    storage,
-
-    limits: {
-      fileSize:
-        5 *
-        1024 *
-        1024,
-    },
-
-    fileFilter,
-  });
-
-module.exports =
-  uploadVendorImage;
+module.exports = upload;

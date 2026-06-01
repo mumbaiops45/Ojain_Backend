@@ -617,7 +617,7 @@ dotenv.config();
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const path = require("path");
+// const path = require("path");
 
 const connectDB = require("./config/db");
 
@@ -661,10 +661,10 @@ app.use(
 // STATIC FILES
 // ====================================
 
-app.use(
-  "/uploads",
-  express.static(path.join(__dirname, "uploads"))
-);
+// app.use(
+//   "/uploads",
+//   express.static(path.join(__dirname, "uploads"))
+// );
 
 // ====================================
 // TEST ROUTE
