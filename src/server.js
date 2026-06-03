@@ -614,6 +614,9 @@
 const dotenv = require("dotenv");
 dotenv.config();
 
+require("./config/cloudinary");
+
+
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -622,6 +625,7 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 
 // ROUTES
+
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const productRoutes = require("./routes/productRoutes");
