@@ -1,32 +1,137 @@
 const Product = require("../models/Product");
 const Category = require("../models/Category");
 // ================= CREATE PRODUCT =================
-const createProduct = async (req, res) => {
+// const createProduct = async (req, res) => {
+//   try {
+//     // check category exists
+//     const categoryExists = await Category.findById(
+//       req.body.category
+//     );
+
+//     if (!categoryExists) {
+//       return res.status(400).json({
+//         message: "Invalid category",
+//       });
+//     }
+
+//     // create product
+//     const product = await Product.create({
+//       ...req.body,
+//       vendorId: req.user.id,
+//     });
+
+//     res.status(201).json({
+//       message: "Product created successfully",
+//       product,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       message: error.message,
+//     });
+//   }
+// };
+// const createProduct = async (
+//   req,
+//   res
+// ) => {
+//   try {
+//     const categoryExists =
+//       await Category.findById(
+//         req.body.category
+//       );
+
+//     if (!categoryExists) {
+//       return res.status(400).json({
+//         message:
+//           "Invalid category",
+//       });
+//     }
+
+//     const images =
+//       req.files?.map(
+//         (file) => file.path
+//       ) || [];
+
+//     const product =
+//       await Product.create({
+//         ...req.body,
+
+//         vendorId:
+//           req.user.id,
+
+//         images,
+//       });
+
+//     res.status(201).json({
+//       message:
+//         "Product created successfully",
+
+//       product,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       message:
+//         error.message,
+//     });
+//   }
+// };
+
+const createProduct = async (
+  req,
+  res
+) => {
   try {
-    // check category exists
-    const categoryExists = await Category.findById(
-      req.body.category
-    );
+
+    const categoryExists =
+      await Category.findById(
+        req.body.category
+      );
 
     if (!categoryExists) {
       return res.status(400).json({
-        message: "Invalid category",
+        message:
+          "Invalid category",
       });
     }
 
-    // create product
-    const product = await Product.create({
-      ...req.body,
-      vendorId: req.user.id,
-    });
+    let images = [];
+
+    if (
+      req.files &&
+      req.files.length > 0
+    ) {
+      images = req.files.map(
+        (file) => file.path
+      );
+    } else if (
+      req.body.images &&
+      Array.isArray(req.body.images)
+    ) {
+      images = req.body.images;
+    }
+
+    // console.log(req.body);
+    // console.log(images);
+
+    const product =
+      await Product.create({
+        ...req.body,
+        vendorId:
+          req.user?.id ||
+          req.body.vendorId,
+        images,
+      });
 
     res.status(201).json({
-      message: "Product created successfully",
+      message:
+        "Product created successfully",
       product,
     });
+
   } catch (error) {
     res.status(500).json({
-      message: error.message,
+      message:
+        error.message,
     });
   }
 };
@@ -69,38 +174,96 @@ const getProductById = async (req, res) => {
 };
 
 // ================= UPDATE PRODUCT =================
-const updateProduct = async (req, res) => {
+// const updateProduct = async (req, res) => {
+//   try {
+//     const product = await Product.findById(
+//       req.params.id
+//     );
+
+//     if (!product) {
+//       return res.status(404).json({
+//         message: "Product not found",
+//       });
+//     }
+
+//     const updatedProduct =
+//       await Product.findByIdAndUpdate(
+//         req.params.id,
+//         req.body,
+//         {
+//           new: true,
+//         }
+//       );
+
+//     res.status(200).json({
+//       message: "Product updated successfully",
+//       updatedProduct,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       message: error.message,
+//     });
+//   }
+// };
+
+const updateProduct = async (
+  req,
+  res
+) => {
   try {
-    const product = await Product.findById(
-      req.params.id
-    );
+    const product =
+      await Product.findById(
+        req.params.id
+      );
 
     if (!product) {
       return res.status(404).json({
-        message: "Product not found",
+        message:
+          "Product not found",
       });
+    }
+
+    let images = product.images;
+
+    if (
+      req.files &&
+      req.files.length > 0
+    ) {
+      images = req.files.map(
+        (file) => file.path
+      );
+    } else if (
+      req.body.images &&
+      Array.isArray(req.body.images)
+    ) {
+      images = req.body.images;
     }
 
     const updatedProduct =
       await Product.findByIdAndUpdate(
         req.params.id,
-        req.body,
+        {
+          ...req.body,
+          images,
+        },
         {
           new: true,
         }
       );
 
     res.status(200).json({
-      message: "Product updated successfully",
+      message:
+        "Product updated successfully",
+
       updatedProduct,
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message,
+      message:
+        error.message,
     });
   }
 };
-
 // ================= DELETE PRODUCT =================
 const deleteProduct = async (req, res) => {
   try {
