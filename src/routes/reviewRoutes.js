@@ -1,39 +1,39 @@
-const express = require("express");
+  const express = require("express");
 
-const router = express.Router();
+  const router = express.Router();
 
-const {
-  createReview,
-  getProductReviews,
-  deleteReview,
-} = require("../controllers/reviewController");
+  const {
+    createReview,
+    getProductReviews,
+    deleteReview,
+  } = require("../controllers/reviewController");
 
-const {
-  protect,
-  customerOnly,
-  adminOnly,
-} = require("../middleware/authMiddleware");
+  const {
+    protect,
+    customerOnly,
+    adminOnly,
+  } = require("../middleware/authMiddleware");
 
-// CUSTOMER
-router.post(
-  "/",
-  protect,
-  customerOnly,
-  createReview
-);
+  // CUSTOMER
+  router.post(
+    "/",
+    protect,
+    customerOnly,
+    createReview
+  );
 
-// PUBLIC
-router.get(
-  "/product/:productId",
-  getProductReviews
-);
+  // PUBLIC
+  router.get(
+    "/product/:productId",
+    getProductReviews
+  );
 
-// ADMIN
-router.delete(
-  "/:id",
-  protect,
-  adminOnly,
-  deleteReview
-);
+  // ADMIN
+  router.delete(
+    "/:id",
+    protect,
+    adminOnly,
+    deleteReview
+  );
 
-module.exports = router;
+  module.exports = router;

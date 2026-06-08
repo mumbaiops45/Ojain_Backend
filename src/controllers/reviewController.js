@@ -1,31 +1,45 @@
 const Review = require("../models/Review");
-
 const Product = require("../models/Product");
+const Order = require("../models/Order");
 
-// ================= CREATE REVIEW =================
+// CREATE REVIEW
 const createReview = async (req, res) => {
   try {
-    const review = await Review.create(
-      req.body
-    );
+    const { productId, vendorId, rating, comment } = req.body;
 
-    // UPDATE PRODUCT AVG RATING
-    const reviews = await Review.find({
-      productId: review.productId,
+    // Check product purchased
+    const order = await Order.findOne({
+      customerId: req.user._id,
+      "items.product": productId,
     });
 
-    const avg =
-      reviews.reduce(
-        (acc, item) => acc + item.rating,
-        0
-      ) / reviews.length;
+    if (!order) {
+      return res.status(400).json({
+        message: "Only customers who purchased this product can review it",
+      });
+    }
 
-    await Product.findByIdAndUpdate(
-      review.productId,
-      {
-        avgRating: avg,
-      }
-    );
+    // Prevent duplicate review
+    const existingReview = await Review.findOne({
+      customerId: req.user._id,
+      productId,
+    });
+
+    if (existingReview) {
+      return res.status(400).json({
+        message: "You already reviewed this product",
+      });
+    }
+
+    const review = await Review.create({
+      customerId: req.user._id,
+      productId,
+      vendorId,
+      rating,
+      comment,
+    });
+
+    await updateProductRating(productId);
 
     res.status(201).json({
       success: true,
@@ -38,11 +52,8 @@ const createReview = async (req, res) => {
   }
 };
 
-// ================= GET PRODUCT REVIEWS =================
-const getProductReviews = async (
-  req,
-  res
-) => {
+// GET REVIEWS
+const getProductReviews = async (req, res) => {
   try {
     const reviews = await Review.find({
       productId: req.params.productId,
@@ -61,12 +72,10 @@ const getProductReviews = async (
   }
 };
 
-// ================= DELETE REVIEW =================
+// DELETE REVIEW
 const deleteReview = async (req, res) => {
   try {
-    const review = await Review.findById(
-      req.params.id
-    );
+    const review = await Review.findById(req.params.id);
 
     if (!review) {
       return res.status(404).json({
@@ -74,18 +83,37 @@ const deleteReview = async (req, res) => {
       });
     }
 
+    const productId = review.productId;
+
     await review.deleteOne();
+
+    await updateProductRating(productId);
 
     res.status(200).json({
       success: true,
-      message:
-        "Review deleted successfully",
+      message: "Review deleted successfully",
     });
   } catch (error) {
     res.status(500).json({
       message: error.message,
     });
   }
+};
+
+// UPDATE AVG RATING
+const updateProductRating = async (productId) => {
+  const reviews = await Review.find({ productId });
+
+  const avg =
+    reviews.length > 0
+      ? reviews.reduce((sum, item) => sum + item.rating, 0) /
+        reviews.length
+      : 0;
+
+  await Product.findByIdAndUpdate(productId, {
+    avgRating: avg.toFixed(1),
+    reviewCount: reviews.length,
+  });
 };
 
 module.exports = {
