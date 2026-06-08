@@ -492,28 +492,17 @@ const loginCustomer = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // VALIDATION
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Email and password are required",
-      });
-    }
-
-    // FIND USER
     const user = await User.findOne({
-      email,
-      role: "customer",
+      email: email.toLowerCase(),
     });
 
     if (!user) {
-      return res.status(404).json({
+      return res.status(400).json({
         success: false,
-        message: "Customer not found",
+        message: "Invalid email or password",
       });
     }
 
-    // CHECK PASSWORD
     const isMatch = await bcrypt.compare(
       password,
       user.password
@@ -522,34 +511,34 @@ const loginCustomer = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({
         success: false,
-        message: "Invalid credentials",
+        message: "Invalid email or password",
       });
     }
 
-    // RESPONSE
+    const token = generateToken(
+      user._id,
+      user.role
+    );
+
     res.status(200).json({
       success: true,
       message: "Login successful",
-
-      token: generateToken(user._id, user.role),
-
+      token,
       user: {
         _id: user._id,
         name: user.name,
         email: user.email,
-        phone: user.phone,
         role: user.role,
       },
     });
-  } catch (error) {
-    console.log(error);
 
+  } catch (error) {
     res.status(500).json({
       success: false,
       message: error.message,
     });
   }
-};
+}
 
 //
 // VENDOR REGISTER
@@ -665,45 +654,78 @@ const loginVendor = async (req, res) => {
 //
 // ADMIN LOGIN
 //
-const adminLogin = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+// const adminLogin = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
 
-    if (
-      email === "admin@gmail.com" &&
-      password === "Admin@123"
-    ) {
-      const admin = {
-        _id: "64f1c2a9b123456789abcd12",
-        name: "Super Admin",
-        email: "admin@gmail.com",
-        role: "admin",
-      };
+//     if (
+//       email === "admin@gmail.com" &&
+//       password === "Admin@123"
+//     ) {
+//       const admin = {
+//         _id: "64f1c2a9b123456789abcd12",
+//         name: "Super Admin",
+//         email: "admin@gmail.com",
+//         role: "admin",
+//       };
 
-      return res.status(200).json({
-        success: true,
-        message: "Admin login successful",
+//       return res.status(200).json({
+//         success: true,
+//         message: "Admin login successful",
 
-        token: generateToken(admin._id, admin.role),
+//         token: generateToken(admin._id, admin.role),
 
-        admin,
-      });
-    }
+//         admin,
+//       });
+//     }
 
-    return res.status(400).json({
-      success: false,
-      message: "Invalid admin credentials",
-    });
-  } catch (error) {
-    console.log(error);
+//     return res.status(400).json({
+//       success: false,
+//       message: "Invalid admin credentials",
+//     });
+//   } catch (error) {
+//     console.log(error);
 
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+//     return res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
 
+// const admin = await User.findOne({
+//   email,
+//   role: "admin",
+// });
+
+// if (!admin) {
+//   return res.status(404).json({
+//     success: false,
+//     message: "Admin not found",
+//   });
+// }
+
+// const isMatch = await bcrypt.compare(
+//   password,
+//   admin.password
+// );
+
+// if (!isMatch) {
+//   return res.status(400).json({
+//     success: false,
+//     message: "Invalid credentials",
+//   });
+// }
+
+// return res.status(200).json({
+//   success: true,
+//   message: "Admin login successful",
+//   token: generateToken(
+//     admin._id,
+//     admin.role
+//   ),
+//   admin,
+// });
 //
 // LOGOUT
 //
@@ -852,7 +874,7 @@ module.exports = {
   loginCustomer,
  registerVendor,
   loginVendor,
-  adminLogin,
+  // adminLogin,
   logoutUser,
    getAllUsers,
   getUserById,

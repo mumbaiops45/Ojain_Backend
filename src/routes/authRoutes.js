@@ -147,10 +147,10 @@ router.post(
 // ==========================================
 // ADMIN LOGIN
 // ==========================================
-router.post(
-  "/admin/login",
-  adminLogin
-);
+// router.post(
+//   "/admin/login",
+//   adminLogin
+// );
 
 // ==========================================
 // LOGOUT
