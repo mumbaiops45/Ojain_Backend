@@ -189,6 +189,12 @@ router.get(
   productController.getProductsByCategory
 );
 
+// alias — must be before /:id
+router.get(
+  "/all",
+  productController.getAllProducts
+);
+
 // VENDOR PRODUCTS — must be before /:id or Express matches "vendor" as an id
 router.get(
   "/vendor/my-products",
