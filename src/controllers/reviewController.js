@@ -59,6 +59,27 @@ const getProductReviews = async (req, res) => {
   }
 };
 
+// GET ALL REVIEWS (ADMIN)
+const getAllReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find()
+      .populate("customerId", "name email")
+      .populate("productId", "name")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: reviews.length,
+      reviews,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 // DELETE REVIEW
 const deleteReview = async (req, res) => {
   try {
@@ -105,6 +126,7 @@ const updateProductRating = async (productId) => {
 
 module.exports = {
   createReview,
+  getAllReviews,
   getProductReviews,
   deleteReview,
 };

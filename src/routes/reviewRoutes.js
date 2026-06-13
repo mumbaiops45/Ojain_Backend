@@ -4,6 +4,7 @@
 
   const {
     createReview,
+    getAllReviews,
     getProductReviews,
     deleteReview,
   } = require("../controllers/reviewController");
@@ -20,6 +21,12 @@
     protect,
     customerOnly,
     createReview
+  );
+
+  // GET ALL REVIEWS (PUBLIC)
+  router.get(
+    "/",
+    getAllReviews
   );
 
   // PUBLIC
