@@ -246,6 +246,11 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
 
+    profileImage: {
+      type: String,
+      default: "",
+    },
+
     addresses: [addressSchema],
 
     role: {

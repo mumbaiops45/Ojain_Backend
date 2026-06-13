@@ -120,9 +120,19 @@ const {
 } = require("../controllers/authController");
 
 const {
+  getMyProfile,
+  updateMyProfile,
+  changePassword,
+  uploadAvatar,
+} = require("../controllers/profileController");
+
+const {
   protect,
   adminOnly,
+  customerOnly,
 } = require("../middleware/authMiddleware");
+
+const profileUpload = require("../middleware/profileUpload");
 
 // ==========================================
 // CUSTOMER
@@ -159,6 +169,43 @@ router.post(
   "/logout",
   protect,
   logoutUser
+);
+
+// ==========================================
+// CUSTOMER PROFILE
+// ==========================================
+
+// GET MY PROFILE
+router.get(
+  "/profile",
+  protect,
+  customerOnly,
+  getMyProfile
+);
+
+// UPDATE MY PROFILE
+router.put(
+  "/profile",
+  protect,
+  customerOnly,
+  updateMyProfile
+);
+
+// CHANGE PASSWORD
+router.put(
+  "/profile/change-password",
+  protect,
+  customerOnly,
+  changePassword
+);
+
+// UPLOAD AVATAR
+router.put(
+  "/profile/avatar",
+  protect,
+  customerOnly,
+  profileUpload.single("avatar"),
+  uploadAvatar
 );
 
 // ==========================================
