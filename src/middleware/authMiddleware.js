@@ -6,12 +6,16 @@ const jwt = require("jsonwebtoken");
 const protect = async (req, res, next) => {
   let token;
 
-  // CHECK AUTH HEADER
+  // CHECK AUTHORIZATION HEADER
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
+  }
+  // FALLBACK: CHECK COOKIE
+  else if (req.cookies && req.cookies.token) {
+    token = req.cookies.token;
   }
 
   // NO TOKEN
@@ -39,7 +43,7 @@ const protect = async (req, res, next) => {
 
     return res.status(401).json({
       success: false,
-      message: error.message,
+      message: "Not authorized, token failed",
     });
   }
 };
