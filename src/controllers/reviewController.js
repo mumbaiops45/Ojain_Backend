@@ -9,7 +9,7 @@ const createReview = async (req, res) => {
 
     // Check product purchased
     const order = await Order.findOne({
-      customerId: req.user._id,
+      customerId: req.user.id,
       "items.product": productId,
     });
 
@@ -21,7 +21,7 @@ const createReview = async (req, res) => {
 
     // Prevent duplicate review
     const existingReview = await Review.findOne({
-      customerId: req.user._id,
+      customerId: req.user.id,
       productId,
     });
 
@@ -32,7 +32,7 @@ const createReview = async (req, res) => {
     }
 
     const review = await Review.create({
-      customerId: req.user._id,
+      customerId: req.user.id,
       productId,
       vendorId,
       rating,
