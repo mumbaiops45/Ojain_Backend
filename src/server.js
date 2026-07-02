@@ -19,6 +19,8 @@ const addressRoutes = require("./routes/addressRoutes");
 const payoutRoutes = require("./routes/payoutRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
+const dealerRoutes = require("./routes/dealerRoutes");
+
 
 connectDB();
 
@@ -41,7 +43,6 @@ app.use(
 app.get("/", (req, res) => {
   res.send("API Running...");
 });
-
 app.use("/api/auth", authRoutes);
 // app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
@@ -53,7 +54,7 @@ app.use("/api/address", addressRoutes);
 app.use("/api/payouts", payoutRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/reviews", reviewRoutes);
-
+app.use("/api/dealers", dealerRoutes);
 app.use((req, res) => {
   res.status(404).json({
     success: false,
