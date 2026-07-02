@@ -2,37 +2,23 @@ const Dealer = require("../models/Dealer");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// ============================================
-// Generate Tokens
-// ============================================
-
 const generateTokens = (id, role) => {
   const accessToken = jwt.sign(
     { id, role },
     process.env.JWT_SECRET,
-    {
-      expiresIn: "15m",
-    }
+    { expiresIn: "180m" }
   );
-
   const refreshToken = jwt.sign(
     { id, role },
     process.env.JWT_REFRESH_SECRET,
-    {
-      expiresIn: "7d",
-    }
+    { expiresIn: "7d" }
   );
-
-  return {
-    accessToken,
-    refreshToken,
-  };
+  return { accessToken, refreshToken };
 };
 
 // ============================================
 // REGISTER DEALER
 // ============================================
-
 const registerDealer = async (req, res) => {
   try {
     const {
@@ -47,23 +33,14 @@ const registerDealer = async (req, res) => {
       ifscCode,
     } = req.body;
 
-    if (
-      !fullName ||
-      !email ||
-      !password ||
-      !phone ||
-      !city
-    ) {
+    if (!fullName || !email || !password || !phone || !city) {
       return res.status(400).json({
         success: false,
         message: "Please fill all required fields.",
       });
     }
 
-    const existingDealer = await Dealer.findOne({
-      email,
-    });
-
+    const existingDealer = await Dealer.findOne({ email });
     if (existingDealer) {
       return res.status(400).json({
         success: false,
@@ -77,27 +54,21 @@ const registerDealer = async (req, res) => {
       password,
       phone,
       city,
-
       bankName,
       accountHolderName,
       accountNumber,
       ifscCode,
-
-      // Dealer code generated after admin approval
-      dealerCode: null,
-
       isApproved: false,
+      // dealerCode is omitted – will be assigned by admin
     });
 
     res.status(201).json({
       success: true,
-      message:
-        "Dealer registered successfully. Waiting for admin approval.",
+      message: "Dealer registered successfully. Waiting for admin approval.",
       dealerId: dealer._id,
     });
   } catch (error) {
     console.log(error);
-
     res.status(500).json({
       success: false,
       message: error.message,
@@ -108,14 +79,11 @@ const registerDealer = async (req, res) => {
 // ============================================
 // LOGIN DEALER
 // ============================================
-
 const loginDealer = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const dealer = await Dealer.findOne({
-      email,
-    });
+    const dealer = await Dealer.findOne({ email });
 
     if (!dealer) {
       return res.status(404).json({
@@ -127,16 +95,11 @@ const loginDealer = async (req, res) => {
     if (!dealer.isApproved) {
       return res.status(403).json({
         success: false,
-        message:
-          "Your account is waiting for admin approval.",
+        message: "Your account is waiting for admin approval.",
       });
     }
 
-    const isMatch = await bcrypt.compare(
-      password,
-      dealer.password
-    );
-
+    const isMatch = await bcrypt.compare(password, dealer.password);
     if (!isMatch) {
       return res.status(400).json({
         success: false,
@@ -144,38 +107,19 @@ const loginDealer = async (req, res) => {
       });
     }
 
-    const {
-      accessToken,
-      refreshToken,
-    } = generateTokens(
-      dealer._id,
-      dealer.role
-    );
+    const { accessToken, refreshToken } = generateTokens(dealer._id, dealer.role);
 
-    res.cookie(
-      "dealerRefreshToken",
-      refreshToken,
-      {
-        httpOnly: true,
-        secure:
-          process.env.NODE_ENV ===
-          "production",
-        sameSite: "strict",
-        maxAge:
-          7 *
-          24 *
-          60 *
-          60 *
-          1000,
-      }
-    );
+    res.cookie("dealerRefreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
     res.status(200).json({
       success: true,
       message: "Login successful.",
-
       token: accessToken,
-
       dealer: {
         _id: dealer._id,
         fullName: dealer.fullName,
@@ -183,16 +127,13 @@ const loginDealer = async (req, res) => {
         phone: dealer.phone,
         city: dealer.city,
         dealerCode: dealer.dealerCode,
-        walletBalance:
-          dealer.walletBalance,
-        commissionRate:
-          dealer.commissionRate,
+        walletBalance: dealer.walletBalance,
+        commissionRate: dealer.commissionRate,
         role: dealer.role,
       },
     });
   } catch (error) {
     console.log(error);
-
     res.status(500).json({
       success: false,
       message: error.message,
@@ -203,37 +144,23 @@ const loginDealer = async (req, res) => {
 // ============================================
 // REFRESH TOKEN
 // ============================================
-
-const refreshDealerToken = async (
-  req,
-  res
-) => {
+const refreshDealerToken = async (req, res) => {
   try {
-    const refreshToken =
-      req.cookies.dealerRefreshToken;
+    const refreshToken = req.cookies.dealerRefreshToken;
 
     if (!refreshToken) {
       return res.status(401).json({
         success: false,
-        message:
-          "Refresh token missing.",
+        message: "Refresh token missing.",
       });
     }
 
-    const decoded = jwt.verify(
-      refreshToken,
-      process.env.JWT_REFRESH_SECRET
-    );
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
 
     const accessToken = jwt.sign(
-      {
-        id: decoded.id,
-        role: decoded.role,
-      },
+      { id: decoded.id, role: decoded.role },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "15m",
-      }
+      { expiresIn: "15m" }
     );
 
     res.status(200).json({
@@ -243,8 +170,7 @@ const refreshDealerToken = async (
   } catch (error) {
     res.status(403).json({
       success: false,
-      message:
-        "Invalid refresh token.",
+      message: "Invalid refresh token.",
     });
   }
 };
@@ -252,15 +178,8 @@ const refreshDealerToken = async (
 // ============================================
 // LOGOUT DEALER
 // ============================================
-
-const logoutDealer = async (
-  req,
-  res
-) => {
-  res.clearCookie(
-    "dealerRefreshToken"
-  );
-
+const logoutDealer = async (req, res) => {
+  res.clearCookie("dealerRefreshToken");
   res.status(200).json({
     success: true,
     message: "Logout successful.",
