@@ -898,13 +898,34 @@ const approveDealer = async (req, res) => {
       return res.status(404).json({ success: false, message: "Dealer not found" });
     }
     dealer.isApproved = true;
-    // Optionally generate dealerCode here if needed (e.g., "D-XXXX")
+
+if (!dealer.dealerCode) {
+
+    let code;
+    let exists;
+
+    do {
+
+        code =
+            "OJAIN" +
+            Math.floor(100000 + Math.random() * 900000);
+
+        exists = await Dealer.findOne({
+            dealerCode: code,
+        });
+
+    } while (exists);
+
+    dealer.dealerCode = code;
+}
+
     await dealer.save();
     res.status(200).json({ success: true, message: "Dealer approved successfully" });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
 
 // ==========================================
 // UNAPPROVE DEALER (was unapproveVendor)

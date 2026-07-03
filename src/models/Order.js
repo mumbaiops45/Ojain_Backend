@@ -67,6 +67,22 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
+    dealer: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Dealer",
+      default: null,
+    },
+
+    dealerCode: {
+      type: String,
+      default: "",
+    },
+
+    dealerCommission: {
+      type: Number,
+      default: 0,
+    },
+
     // PAYMENT METHOD
     paymentMethod: {
       type: String,

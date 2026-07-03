@@ -186,9 +186,40 @@ const logoutDealer = async (req, res) => {
   });
 };
 
+
+const verifyDealer = async (req, res) => {
+
+  const { dealerCode } = req.body;
+
+  const dealer = await Dealer.findOne({
+    dealerCode,
+    isApproved: true,
+  });
+
+  if (!dealer) {
+    return res.status(404).json({
+      success: false,
+      message: "Invalid Dealer Code",
+    });
+  }
+
+  res.json({
+    success: true,
+    dealer: {
+      id: dealer._id,
+      name: dealer.fullName,
+      dealerCode: dealer.dealerCode,
+      commissionRate: dealer.commissionRate,
+    },
+  });
+
+};
+
+
 module.exports = {
   registerDealer,
   loginDealer,
   refreshDealerToken,
   logoutDealer,
+  verifyDealer,
 };

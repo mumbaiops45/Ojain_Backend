@@ -4,6 +4,8 @@ const crypto = require("crypto");
 
 const Order = require("../models/Order");
 
+const Dealer = require("../models/Dealer");
+
 // ================= RAZORPAY INSTANCE =================
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -74,15 +76,36 @@ const verifyPayment = async (req, res) => {
       expectedSignature === razorpay_signature
     ) {
       // CREATE ORDER IN DATABASE
-      const newOrder = await Order.create({
-        ...orderData,
+      // const newOrder = await Order.create({
+      //   ...orderData,
 
-        paymentId: razorpay_payment_id,
+      //   paymentId: razorpay_payment_id,
 
-        razorpayOrderId: razorpay_order_id,
+      //   razorpayOrderId: razorpay_order_id,
 
-        isPaid: true,
-      });
+      //   isPaid: true,
+      // });
+
+      if (newOrder.dealer) {
+
+    const dealer = await Dealer.findById(newOrder.dealer);
+
+    if (dealer) {
+
+        const commission =
+            (newOrder.totalAmount * dealer.commissionRate) / 100;
+
+        newOrder.dealerCommission = commission;
+
+        dealer.walletBalance += commission;
+        dealer.totalCommission += commission;
+        dealer.totalOrders += 1;
+        dealer.referralCount += 1;
+
+        await dealer.save();
+        await newOrder.save();
+    }
+}
 
       return res.status(200).json({
         success: true,

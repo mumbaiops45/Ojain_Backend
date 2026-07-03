@@ -7,6 +7,7 @@ const {
   loginDealer,
   refreshDealerToken,
   logoutDealer,
+  verifyDealer,
 } = require("../controllers/dealerController");
 
 // Register
@@ -32,5 +33,7 @@ router.post(
   "/logout",
   logoutDealer
 );
+
+router.post("/verify", verifyDealer);
 
 module.exports = router;
