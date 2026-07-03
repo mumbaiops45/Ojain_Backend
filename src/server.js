@@ -9,7 +9,7 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
-// const adminRoutes = require("./routes/adminRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 const productRoutes = require("./routes/productRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const vendorRoutes = require("./routes/vendorRoutes");
@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
   res.send("API Running...");
 });
 app.use("/api/auth", authRoutes);
-// app.use("/api/admin", adminRoutes);
+app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/vendors", vendorRoutes);
