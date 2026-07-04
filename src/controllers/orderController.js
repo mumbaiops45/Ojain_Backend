@@ -2,15 +2,11 @@ const Order = require("../models/Order");
 const Cart = require("../models/Cart");
 const Address = require("../models/Address");
 const Dealer = require("../models/Dealer");
+
 // Create order from cart
 const createOrder = async (req, res) => {
   try {
-    const {
-      addressId,
-      paymentMethod,
-      dealerId,
-      dealerCode
-    } = req.body;
+    const { addressId, paymentMethod, dealerId, dealerCode } = req.body;
 
     const cart = await Cart.findOne({ user: req.user.id }).populate("items.product");
     if (!cart || cart.items.length === 0) {
@@ -31,31 +27,36 @@ const createOrder = async (req, res) => {
 
     const totalAmount = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
-    // const order = await Order.create({
-    //   user: req.user.id,
-    //   items,
-    //   totalAmount,
-    //   address: addressId,
-    //   paymentMethod,
-    //   paymentStatus: paymentMethod === "COD" ? "Pending" : "Paid", // mock for Card/UPI
-    //   orderStatus: "Placed",
-    // });
-
+    // Create the order
     const order = await Order.create({
       user: req.user.id,
       items,
       totalAmount,
       address: addressId,
-
       dealer: dealerId || null,
       dealerCode: dealerCode || "",
       dealerCommission: 0,
-
       paymentMethod,
       paymentStatus: paymentMethod === "COD" ? "Pending" : "Paid",
       orderStatus: "Placed",
     });
 
+    // ─── Dealer commission logic ───
+    if (paymentMethod === "COD" && dealerId) {
+      const dealer = await Dealer.findById(dealerId);
+      if (dealer) {
+        const commission = (totalAmount * dealer.commissionRate) / 100;
+        order.dealerCommission = commission;
+
+        dealer.walletBalance += commission;
+        dealer.totalCommission += commission;
+        dealer.totalOrders += 1;
+        dealer.referralCount += 1;
+
+        await dealer.save();
+        await order.save(); // save the updated commission
+      }
+    }
 
     // Clear cart after order
     cart.items = [];
@@ -67,28 +68,6 @@ const createOrder = async (req, res) => {
   }
 };
 
-
-
-if (paymentMethod === "COD" && dealerId) {
-
-    const dealer = await Dealer.findById(dealerId);
-
-    if (dealer) {
-
-        const commission =
-            (totalAmount * dealer.commissionRate) / 100;
-
-        order.dealerCommission = commission;
-
-        dealer.walletBalance += commission;
-        dealer.totalCommission += commission;
-        dealer.totalOrders += 1;
-        dealer.referralCount += 1;
-
-        await dealer.save();
-        await order.save();
-    }
-}
 // Get user's orders
 const getMyOrders = async (req, res) => {
   try {
