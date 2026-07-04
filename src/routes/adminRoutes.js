@@ -356,7 +356,7 @@ router.get("/dashboard", protect, adminOnly, getDashboardStats);
 
 // GET PENDING DEALERS
 router.get("/dealers/pending", protect, adminOnly, getPendingDealers);
-
+  
 // APPROVE DEALER
 router.put("/dealers/:id/approve", protect, adminOnly, approveDealer);
 

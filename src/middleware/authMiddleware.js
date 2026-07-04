@@ -61,13 +61,13 @@ const customerOnly = (req, res, next) => {
 };
 
 // VENDOR ONLY
-const vendorOnly = (req, res, next) => {
-  if (req.user.role === "vendor") {
+const dealerOnly  = (req, res, next) => {
+  if (req.user.role === "dealer") {
     next();
   } else {
     return res.status(403).json({
       success: false,
-      message: "Vendor only",
+      message: "Access denied. Dealer only. ",
     });
   }
 };
@@ -87,6 +87,6 @@ const adminOnly = (req, res, next) => {
 module.exports = {
   protect,
   customerOnly,
-  vendorOnly,
+  dealerOnly,
   adminOnly,
 };
