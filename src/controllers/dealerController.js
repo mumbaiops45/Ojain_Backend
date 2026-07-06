@@ -480,7 +480,7 @@ const updateDealerProfile = async (req, res) => {
       accountNumber,
       ifscCode,
       profileImage,
-    } = req.body;
+    } = req.body || {};
 
     const dealer = await Dealer.findById(req.user.id);
     if (!dealer) {
