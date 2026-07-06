@@ -3,47 +3,83 @@
 const jwt = require("jsonwebtoken");
 
 // PROTECT – ensures user is authenticated
+// const protect = async (req, res, next) => {
+//   let token;
+
+//   // CHECK AUTHORIZATION HEADER
+//   if (
+//     req.headers.authorization &&
+//     req.headers.authorization.startsWith("Bearer")
+//   ) {
+//     token = req.headers.authorization.split(" ")[1];
+//   }
+//   // FALLBACK: CHECK COOKIE
+//   else if (req.cookies && req.cookies.token) {
+//     token = req.cookies.token;
+//   }
+
+//   // NO TOKEN
+//   if (!token) {
+//     return res.status(401).json({
+//       success: false,
+//       message: "Not authorized, no token",
+//     });
+//   }
+
+//   try {
+//     // VERIFY TOKEN
+//     const decoded = jwt.verify(
+//       token,
+//       process.env.JWT_SECRET
+//     );
+
+//     // SAVE USER DATA
+//     req.user = decoded;
+
+//     next();
+//   }
+//   catch (error) {
+//     console.log("JWT ERROR:", error.message);
+
+//     return res.status(401).json({
+//       success: false,
+//       message: "Not authorized, token failed",
+//     });
+//   }
+// };
 const protect = async (req, res, next) => {
   let token;
 
-  // CHECK AUTHORIZATION HEADER
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
   }
-  // FALLBACK: CHECK COOKIE
-  else if (req.cookies && req.cookies.token) {
-    token = req.cookies.token;
-  }
 
-  // NO TOKEN
+  console.log("TOKEN:", token);
+
   if (!token) {
     return res.status(401).json({
       success: false,
-      message: "Not authorized, no token",
+      message: "No Token",
     });
   }
 
   try {
-    // VERIFY TOKEN
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET
-    );
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // SAVE USER DATA
+    console.log("DECODED:", decoded);
+
     req.user = decoded;
 
     next();
-  }
-  catch (error) {
-    console.log("JWT ERROR:", error.message);
+  } catch (err) {
+    console.log(err);
 
     return res.status(401).json({
       success: false,
-      message: "Not authorized, token failed",
+      message: "Invalid Token",
     });
   }
 };
@@ -62,15 +98,18 @@ const customerOnly = (req, res, next) => {
 
 // VENDOR ONLY
 const dealerOnly = (req, res, next) => {
-  console.log("Dealer Role:", req.user.role);
+  console.log("ROLE:", req.user.role);
 
   if (req.user.role === "dealer") {
+    console.log("Dealer Authorized");
     return next();
   }
 
+  console.log("Dealer Rejected");
+
   return res.status(403).json({
     success: false,
-    message: "Access denied. Dealer only.",
+    message: "Dealer only",
     role: req.user.role,
   });
 };
