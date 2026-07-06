@@ -854,7 +854,50 @@ const getDashboardStats = async (req, res) => {
 
     const recentOrders = await Order.find().populate("user", "name email").sort({ createdAt: -1 }).limit(5);
     const recentUsers = await User.find().select("-password").sort({ createdAt: -1 }).limit(5);
-    const recentDealers = await Dealer.find().sort({ createdAt: -1 }).limit(5);  // ← changed
+    const recentDealers = await Dealer.find().sort({ createdAt: -1 }).limit(5);
+
+    const topDealers = await Order.aggregate([
+      {
+        $match: {
+          dealer: { $ne: null },
+          paymentStatus: "Paid",
+        },
+      },
+      {
+        $group: {
+          _id: "$dealer",
+          totalOrders: { $sum: 1 },
+          totalSales: { $sum: "$totalAmount" },
+          totalCommission: { $sum: "$dealerCommission" },
+        },
+      },
+      {
+        $lookup: {
+          from: "dealers",
+          localField: "_id",
+          foreignField: "_id",
+          as: "dealer",
+        },
+      },
+      {
+        $unwind: "$dealer",
+      },
+      {
+        $project: {
+          fullName: "$dealer.fullName",
+          dealerCode: "$dealer.dealerCode",
+          shopName: "$dealer.shopName",
+          totalOrders: 1,
+          totalSales: 1,
+          totalCommission: 1,
+        },
+      },
+      {
+        $sort: {
+          totalSales: -1,
+        },
+      },
+    ]);
 
     res.status(200).json({
       success: true,
@@ -868,7 +911,8 @@ const getDashboardStats = async (req, res) => {
       },
       recentOrders,
       recentUsers,
-      recentDealers,         // ← changed
+      recentDealers,
+      topDealers,       
     });
   } catch (error) {
     console.log(error);
@@ -899,25 +943,25 @@ const approveDealer = async (req, res) => {
     }
     dealer.isApproved = true;
 
-if (!dealer.dealerCode) {
+    if (!dealer.dealerCode) {
 
-    let code;
-    let exists;
+      let code;
+      let exists;
 
-    do {
+      do {
 
         code =
-            "OJAIN" +
-            Math.floor(100000 + Math.random() * 900000);
+          "OJAIN" +
+          Math.floor(100000 + Math.random() * 900000);
 
         exists = await Dealer.findOne({
-            dealerCode: code,
+          dealerCode: code,
         });
 
-    } while (exists);
+      } while (exists);
 
-    dealer.dealerCode = code;
-}
+      dealer.dealerCode = code;
+    }
 
     await dealer.save();
     res.status(200).json({ success: true, message: "Dealer approved successfully" });
