@@ -6,7 +6,7 @@
 
 // // const {
 // //   protect,
-// //   vendorOnly,
+// //   adminOnly,
 // //   adminOnly,
 // // } = require("../middleware/authMiddleware");
 
@@ -25,14 +25,14 @@
 // // router.post(
 // //   "/",
 // //   protect,
-// //   vendorOnly,
+// //   adminOnly,
 // //   productController.createProduct
 // // );
 
 // // router.put(
 // //   "/:id",
 // //   protect,
-// //   vendorOnly,
+// //   adminOnly,
 // //   productController.updateProduct
 // // );
 
@@ -40,7 +40,7 @@
 // // router.get(
 // //   "/vendor/my-products",
 // //   protect,
-// //   vendorOnly,
+// //   adminOnly,
 // //   productController.getVendorProducts
 // // );
 
@@ -70,7 +70,7 @@
 
 // const {
 //   protect,
-//   vendorOnly,
+//   adminOnly,
 //   adminOnly,
 // } = require("../middleware/authMiddleware");
 
@@ -109,7 +109,7 @@
 // router.get(
 //   "/vendor/my-products",
 //   protect,
-//   vendorOnly,
+//   adminOnly,
 //   productController.getVendorProducts
 // );
 
@@ -117,7 +117,7 @@
 // router.post(
 //   "/",
 //   protect,
-//   vendorOnly,
+//   adminOnly,
 //   productController.createProduct
 // );
 // router.get(
@@ -128,7 +128,7 @@
 // router.put(
 //   "/:id",
 //   protect,
-//   vendorOnly,
+//   adminOnly,
 //   productController.updateProduct
 // );
 
@@ -136,7 +136,7 @@
 // router.delete(
 //   "/:id",
 //   protect,
-//   vendorOnly,
+//   adminOnly,
 //   productController.deleteProduct
 // );
 
@@ -167,7 +167,6 @@ const upload =
 
 const {
   protect,
-  vendorOnly,
   adminOnly,
 } = require(
   "../middleware/authMiddleware"
@@ -199,7 +198,7 @@ router.get(
 router.get(
   "/vendor/my-products",
   protect,
-  vendorOnly,
+  adminOnly,
   productController.getVendorProducts
 );
 
@@ -212,7 +211,7 @@ router.get(
 router.post(
   "/",
   protect,
-  vendorOnly,
+  adminOnly,
   upload.array(
     "images",
     10
@@ -224,7 +223,7 @@ router.post(
 router.put(
   "/:id",
   protect,
-  vendorOnly,
+  adminOnly,
   upload.array(
     "images",
     10
@@ -236,7 +235,7 @@ router.put(
 router.delete(
   "/:id",
   protect,
-  vendorOnly,
+  adminOnly,
   productController.deleteProduct
 );
 
