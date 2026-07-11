@@ -336,7 +336,7 @@ const {
   protect,
   adminOnly,
 } = require("../middleware/authMiddleware");
-
+const dealerController = require("../controllers/dealerController");
 // ==========================================
 // AUTH ROUTES
 // ==========================================
@@ -365,6 +365,8 @@ router.put("/dealers/:id/unapprove", protect, adminOnly, unapproveDealer);
 
 // REJECT DEALER
 router.delete("/dealers/:id/reject", protect, adminOnly, rejectDealer);
+
+router.get("/dealers", protect, adminOnly, dealerController.getAllDealers);
 
 // ==========================================
 // PRODUCT ROUTES (unchanged)

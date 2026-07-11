@@ -846,10 +846,16 @@ const getDashboardStats = async (req, res) => {
     const totalProducts = await Product.countDocuments();
     const totalOrders = await Order.countDocuments();
 
+    // const salesResult = await Order.aggregate([
+    //   { $match: { paymentStatus: "Paid" } },
+    //   { $group: { _id: null, totalSales: { $sum: "$totalAmount" } } }
+    // ]);
+
     const salesResult = await Order.aggregate([
       { $match: { paymentStatus: "Paid" } },
-      { $group: { _id: null, totalSales: { $sum: "$totalAmount" } } }
+      { $group: { _id: null, totalRevenue: { $sum: "$totalAmount" } } } // renamed here
     ]);
+    const totalRevenue = salesResult[0]?.totalRevenue || 0;              // renamed here
     const totalSales = salesResult[0]?.totalSales || 0;
 
     const recentOrders = await Order.find().populate("user", "name email").sort({ createdAt: -1 }).limit(5);
@@ -907,12 +913,12 @@ const getDashboardStats = async (req, res) => {
         pendingDealers,      // ← changed
         totalProducts,
         totalOrders,
-        totalSales,
+        totalRevenue,
       },
       recentOrders,
       recentUsers,
       recentDealers,
-      topDealers,       
+      topDealers,
     });
   } catch (error) {
     console.log(error);

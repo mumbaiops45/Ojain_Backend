@@ -562,7 +562,17 @@ const getDealerDashboard = async (req, res) => {
     });
   }
 };
-
+// ==========================================
+// GET ALL DEALERS (NEW)
+// ==========================================
+const getAllDealers = async (req, res) => {
+  try {
+    const dealers = await Dealer.find().sort({ createdAt: -1 });
+    res.status(200).json({ success: true, dealers });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 // ============================================
 // GET DEALER EARNINGS (protected)
 // ============================================
@@ -617,4 +627,5 @@ module.exports = {
   updateDealerProfile,
   getDealerDashboard,
   getDealerEarnings,
+  getAllDealers,
 };
